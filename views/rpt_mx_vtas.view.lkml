@@ -107,7 +107,7 @@ view: rpt_mx_vtas {
 
   measure: DIA{
     type: sum
-    sql: ${TABLE}.BILL_QTY  ;;
+    sql: ${TABLE}.BILL_QTY/1000  ;;
     filters: {
       field: is_current_period_DAY
       value: "yes"
@@ -118,7 +118,7 @@ view: rpt_mx_vtas {
 
   measure: DIA_anterior{
     type: sum
-    sql: ${TABLE}.BILL_QTY  ;;
+    sql: ${TABLE}.BILL_QTY/1000  ;;
     filters: {
       field: is_current_period_DAY_anterior
       value: "yes"
@@ -129,7 +129,7 @@ view: rpt_mx_vtas {
   measure: VS_LY{
     type: number
     sql:    (${DIA}-${DIA_anterior})/NULLIF(${DIA_anterior},0) *100 ;;
-    value_format: "0.00\%"
+    value_format: "0.0\%"
     drill_fields: [ category,planta_desc,client,VS_LY]
   }
 
@@ -137,7 +137,7 @@ view: rpt_mx_vtas {
 
   measure: MTD{
     type: sum
-    sql: ${TABLE}.BILL_QTY ;;
+    sql: ${TABLE}.BILL_QTY/1000 ;;
     filters: {
       field: is_current_period_MONTH
       value: "yes"
@@ -149,7 +149,7 @@ view: rpt_mx_vtas {
 
   measure: MTD_yl{
     type: sum
-    sql: ${TABLE}.BILL_QTY ;;
+    sql: ${TABLE}.BILL_QTY/1000 ;;
     filters: {
       field: is_current_period_MONTH_anterior
       value: "yes"
@@ -161,7 +161,7 @@ view: rpt_mx_vtas {
   measure: VS_LY_1{
     type: number
     sql:    (${MTD}-${MTD_yl})/NULLIF(${MTD_yl},0) *100  ;;
-    value_format: "0.00\%"
+    value_format: "0.0\%"
      drill_fields: [ category,planta_desc,client,VS_LY_1]
   }
 
@@ -169,7 +169,7 @@ view: rpt_mx_vtas {
 
   measure: YTD{
     type: sum
-    sql: ${TABLE}.BILL_QTY ;;
+    sql: ${TABLE}.BILL_QTY /1000;;
     filters: {
       field:  is_current_period_DAY_YTD
       value: "yes"
@@ -180,7 +180,7 @@ view: rpt_mx_vtas {
 
   measure: YTD_anterior{
     type: sum
-    sql: ${TABLE}.BILL_QTY ;;
+    sql: ${TABLE}.BILL_QTY /1000;;
     filters: {
       field:  is_current_period_DAY_YTD_anterior
       value: "yes"
@@ -191,7 +191,7 @@ view: rpt_mx_vtas {
   measure: VS_LY_2{
     type: number
     sql:    (${YTD}-${YTD_anterior})/NULLIF(${YTD_anterior},0) * 100 ;;
-    value_format: "0.00\%"
+    value_format: "0.0\%"
      drill_fields: [ category,planta_desc,client,VS_LY_2]
   }
 
