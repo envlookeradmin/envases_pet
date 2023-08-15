@@ -1,5 +1,19 @@
 view: rpt_mx_vtas {
-  sql_table_name: `RPT_S4H_MX_DEV.RPT_MX_VTAS` ;;
+  derived_table: {
+    sql: SELECT *,DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION FROM `corp-pet-looker-reports.RPT_S4H_MX_DEV.RPT_MX_VTAS` ;;
+  }
+
+
+  filter: date_filter {
+    label: "Período"
+    description: "Use this date filter in combination with the timeframes dimension for dynamic date filtering"
+    type: date
+  }
+
+  dimension: actualizacion {
+    type: date
+    sql: ${TABLE}.ACTUALIZACION ;;
+  }
 
   dimension: base_uom {
     type: string
@@ -10,15 +24,25 @@ view: rpt_mx_vtas {
     sql: ${TABLE}.BILL_QTY ;;
   }
 
-  dimension: calday {
-    type: string
-    sql: ${TABLE}.CALDAY ;;
-  }
+  #dimension: calday {
+  #  type: string
+  #  sql: ${TABLE}.CALDAY ;;
+  #}
   dimension: category {
     label: "Ventas por Sector"
     type: string
     sql: ${TABLE}.CATEGORY ;;
   }
+
+
+  dimension: planta_desc {
+    label: "planta_desc"
+    type: string
+    sql: ${TABLE}.name1 ;;
+  }
+
+
+
   dimension: client {
     label: "Cliente"
     type: string
@@ -80,10 +104,34 @@ view: rpt_mx_vtas {
 
   }
 
-  measure: VS_LY{
+
+  measure: DIA{
     type: sum
-    sql: ${TABLE}.BILL_QTY ;;
+    sql: ${TABLE}.BILL_QTY  ;;
+    filters: {
+      field: is_current_period_DAY
+      value: "yes"
+    }
   }
+
+  measure: DIA_anterior{
+    type: sum
+    sql: ${TABLE}.BILL_QTY  ;;
+    filters: {
+      field: is_current_period_DAY_anterior
+      value: "yes"
+    }
+  }
+
+
+  measure: VS_LY{
+    type: number
+    sql:    (${DIA}-${DIA_anterior})/NULLIF(${DIA_anterior},0) *100 ;;
+    value_format: "0.00\%"
+
+  }
+
+
 
   measure: MTD{
     type: sum
@@ -95,6 +143,55 @@ view: rpt_mx_vtas {
 
   }
 
+  measure: MTD_yl{
+    type: sum
+    sql: ${TABLE}.BILL_QTY ;;
+    filters: {
+      field: is_current_period_MONTH_anterior
+      value: "yes"
+    }
+
+  }
+
+
+  measure: VS_LY_1{
+    type: number
+    sql:    (${MTD}-${MTD_yl})/NULLIF(${MTD_yl},0) *100  ;;
+    value_format: "0.00\%"
+  }
+
+
+
+  measure: YTD{
+    type: sum
+    sql: ${TABLE}.BILL_QTY ;;
+    filters: {
+      field:  is_current_period_DAY_YTD
+      value: "yes"
+    }
+  }
+
+  measure: YTD_anterior{
+    type: sum
+    sql: ${TABLE}.BILL_QTY ;;
+    filters: {
+      field:  is_current_period_DAY_YTD_anterior
+      value: "yes"
+    }
+  }
+
+
+  measure: VS_LY_2{
+    type: number
+    sql:    (${YTD}-${YTD_anterior})/NULLIF(${YTD_anterior},0) * 100 ;;
+    value_format: "0.00\%"
+  }
+
+
+
+
+
+
   measure: MTD_2{
     type: sum
     sql: ${TABLE}.BILL_QTY ;;
@@ -105,29 +202,16 @@ view: rpt_mx_vtas {
 
   }
 
-  measure: VS_LY_1{
+
+
+
+
+  measure: total_BILL_QTY {
     type: sum
     sql: ${TABLE}.BILL_QTY  ;;
   }
 
-  measure: YTD{
-    type: sum
-    sql: ${TABLE}.BILL_QTY ;;
-  }
 
-  measure: VS_LY_2{
-    type: sum
-    sql: ${TABLE}.BILL_QTY  ;;
-  }
-
-  measure: DIA{
-    type: sum
-    sql: ${TABLE}.BILL_QTY  ;;
-    filters: {
-      field: is_current_period_DAY
-      value: "yes"
-    }
-  }
 
   dimension: case_categoria {
     label: "Sector"
@@ -209,28 +293,132 @@ view: rpt_mx_vtas {
       month_name,
       year
     ]
-    sql: DATE(PARSE_TIMESTAMP('%Y%m%d',${TABLE}.CALDAY)) ;;
+    sql: CAST(${TABLE}.Fecha AS TIMESTAMP) ;;
 
   }
 
-  dimension: is_current_period_MONTH{
+  dimension: is_previous_period {
     hidden: yes
     type: yesno
-    sql: DATE_TRUNC(CAST(${created_date} AS DATE),MONTH) = DATE_TRUNC(CAST(CURRENT_DATE() AS DATE), MONTH) ;;
-
+    sql: CAST(${created_date} AS DATE) >=  DATE_ADD(DATE (DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), MONTH)), INTERVAL -1 year)   AND CAST(${created_date} AS DATE) <= DATE_ADD(DATE (CAST({% date_start date_filter %} AS DATE)), INTERVAL -1 year)   ;;
   }
+
+
+
+ ##################Dias ############################
 
   dimension: is_current_period_DAY {
     hidden: yes
     type: yesno
-    sql:DATE_TRUNC(DATE_ADD(CAST(${created_date} AS DATE), INTERVAL -30 DAY), DAY) = DATE_TRUNC(CURRENT_DATE(), DAY);;
+    sql:DATE_TRUNC(CAST(${created_date} AS DATE),DAY) =DATE_ADD( DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), DAY),INTERVAL -1 DAY);;
   }
+
+  dimension: is_current_period_DAY_anterior {
+    hidden: yes
+    type: yesno
+    sql:DATE_TRUNC(CAST(${created_date} AS DATE),DAY) =DATE_ADD(DATE_ADD( DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), DAY),INTERVAL -1 year),INTERVAL -1 day);;
+  }
+
+  ##################Dias ############################
+
+
+  ##################Mes ############################
+  dimension: is_current_period_MONTH{
+    hidden: yes
+    type: yesno
+    sql: DATE_TRUNC(CAST(${created_date} AS DATE),DAY) >=DATE_ADD(DATE_ADD(LAST_DAY(CAST({% date_start date_filter %} AS DATE)), INTERVAL 1 DAY),INTERVAL -1 MONTH) AND DATE_TRUNC(CAST(${created_date} AS DATE),DAY) <= DATE_ADD((CAST({% date_start date_filter %} AS DATE)),INTERVAL -1 day)  ;;
+    #sql: DATE_TRUNC(CAST(${created_date} AS DATE),DAY)>=DATE_ADD(DATE_ADD(LAST_DAY(CAST({% date_start date_filter %} AS DATE)), INTERVAL 1 DAY),INTERVAL -1 MONTH)    ;;
+    #sql:DATE_TRUNC(CAST(${created_date} AS DATE),YEAR) =  DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), YEAR)  and DATE_TRUNC(CAST(${created_date} AS DATE),MONTH) = DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), MONTH) ;;
+    #LAST_DAY
+  }
+
+
+  dimension: is_current_period_MONTH_anterior{
+    hidden: yes
+    type: yesno
+    sql: DATE_TRUNC(CAST(${created_date} AS DATE),DAY) >=DATE_ADD(DATE_ADD(LAST_DAY(     DATE_ADD( CAST({% date_start date_filter %} AS DATE) ,INTERVAL -1 YEAR)        ), INTERVAL 1 DAY),INTERVAL -1 MONTH) AND DATE_TRUNC(CAST(${created_date} AS DATE),DAY) <= DATE_ADD(   DATE_ADD( CAST({% date_start date_filter %} AS DATE) ,INTERVAL -1 YEAR)    ,INTERVAL -1 day)  ;;
+   # sql:DATE_TRUNC(CAST(${created_date} AS DATE),YEAR) =  DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), YEAR) -1  and   DATE_TRUNC(CAST(${created_date} AS DATE),MONTH) = DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), MONTH) ;;
+
+  }
+   ##################Mes ############################
+
+
+  ##################año ############################
+
+
+  dimension: is_current_period_DAY_YTD {
+    hidden: yes
+    type: yesno
+    sql: ${created_date} >= CAST(CONCAT(CAST(EXTRACT(YEAR FROM DATE ({% date_start date_filter %})) AS STRING),"-01-01")  AS DATE) and  ${created_date} <= DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), DAY)   ;;
+    #DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), YEAR);;  FECHA         DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), MONTH)
+  }
+
+  dimension: is_current_period_DAY_YTD_anterior {
+    hidden: yes
+    type: yesno
+    sql: ${created_date} >= CAST(CONCAT(CAST(EXTRACT(YEAR FROM DATE ({% date_start date_filter %})) -1 AS STRING),"-01-01")  AS DATE) and  ${created_date} <= DATE_ADD(DATE_ADD( DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), DAY),INTERVAL -1 year),INTERVAL -1 day)   ;;
+    #DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), YEAR);;  FECHA         DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), MONTH)
+  }
+
+   ##################año ############################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  dimension: is_current_period_DAY_YL {
+    hidden: yes
+    type: yesno
+     sql: DATE_TRUNC(CAST(${created_date} AS DATE),DAY) >=DATE_ADD(DATE_ADD(LAST_DAY(CAST({% date_start date_filter %} AS DATE)), INTERVAL 1 DAY),INTERVAL -1 MONTH) AND DATE_TRUNC(CAST(${created_date} AS DATE),DAY) <= DATE_ADD(LAST_DAY(CAST({% date_start date_filter %} AS DATE)),INTERVAL -1 day)  ;;
+   # sql:DATE_TRUNC(CAST(${created_date} AS DATE),DAY) =DATE_ADD( DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), DAY),INTERVAL -366 DAY);;
+  }
+
+
+
+
+  dimension: is_current_period_DAY_YL1 {
+    hidden: yes
+    type: yesno
+    #sql: ${created_date} >= CAST(CONCAT(CAST(EXTRACT(YEAR FROM DATE ({% date_start date_filter %}))-1 AS STRING),"-01-01")  AS DATE) and  ${created_date} <= DATE_ADD( DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), DAY),INTERVAL -366 DAY)  ;;
+    #DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), YEAR);;  FECHA         DATE_TRUNC(CAST({% date_start date_filter %} AS DATE), MONTH)
+  }
+
+
+
+
+
+
+
+
+
 
   dimension: is_current_period_year {
     hidden: yes
     type: yesno
-    sql:DATE_TRUNC(DATE_ADD(CAST(${created_date} AS DATE), INTERVAL -30 year), year) = DATE_TRUNC(CURRENT_DATE(), year);;
+    sql:${created_year}  = EXTRACT(YEAR FROM CURRENT_DATE())-1 ;;
   }
+
+
+  dimension: is_previous_period_day_vs_day {
+    hidden: yes
+    type: yesno
+    sql: CAST(${created_date} AS DATE) >=  DATE_ADD(DATE (DATE_TRUNC(CAST(CURRENT_DATE() AS DATE), MONTH)), INTERVAL -1 year)   AND CAST(${created_date} AS DATE) <= DATE_ADD(DATE (CAST(CURRENT_DATE() AS DATE)), INTERVAL -1 year)   ;;
+
+  }
+
+
 
   dimension: is_current_period_previus_last_year {
     hidden: yes
