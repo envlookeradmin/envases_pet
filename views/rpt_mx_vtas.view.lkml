@@ -1,6 +1,6 @@
 view: rpt_mx_vtas {
   derived_table: {
-    sql: SELECT *,DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION FROM `corp-pet-looker-reports.RPT_S4H_MX_DEV.RPT_MX_VTAS` ;;
+    sql: SELECT *,DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION FROM `corp-pet-looker-reports.RPT_S4H_MX_DEV.RPT_MX_VTAS` where CATEGORY is not null ;;
   }
 
 
@@ -108,11 +108,12 @@ view: rpt_mx_vtas {
   measure: DIA{
     type: sum
     sql: ${TABLE}.BILL_QTY/1000  ;;
+
     filters: {
       field: is_current_period_DAY
       value: "yes"
     }
-
+    value_format: "#,##0.0"
     drill_fields: [ category,planta_desc,client,DIA]
   }
 
@@ -131,6 +132,13 @@ view: rpt_mx_vtas {
     sql:    (${DIA}-${DIA_anterior})/NULLIF(${DIA_anterior},0) *100 ;;
     value_format: "0.0\%"
     drill_fields: [ category,planta_desc,client,VS_LY]
+
+    html:
+    {% if value > 0 %}
+    <p>{{ rendered_value }}<img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    {% else %}
+    <p>{{ rendered_value }}<img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    {% endif %} ;;
   }
 
 
@@ -144,7 +152,7 @@ view: rpt_mx_vtas {
     }
 
    drill_fields: [ category,planta_desc,client,MTD]
-
+    value_format: "#,##0.0"
   }
 
   measure: MTD_yl{
@@ -163,6 +171,12 @@ view: rpt_mx_vtas {
     sql:    (${MTD}-${MTD_yl})/NULLIF(${MTD_yl},0) *100  ;;
     value_format: "0.0\%"
      drill_fields: [ category,planta_desc,client,VS_LY_1]
+    html:
+    {% if value > 0 %}
+    <p>{{ rendered_value }}<img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    {% else %}
+    <p>{{ rendered_value }}<img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    {% endif %} ;;
   }
 
 
@@ -174,7 +188,7 @@ view: rpt_mx_vtas {
       field:  is_current_period_DAY_YTD
       value: "yes"
     }
-
+    value_format: "#,##0.0"
      drill_fields: [ category,planta_desc,client,YTD]
   }
 
@@ -193,6 +207,12 @@ view: rpt_mx_vtas {
     sql:    (${YTD}-${YTD_anterior})/NULLIF(${YTD_anterior},0) * 100 ;;
     value_format: "0.0\%"
      drill_fields: [ category,planta_desc,client,VS_LY_2]
+    html:
+    {% if value > 0 %}
+    <p>{{ rendered_value }}<img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    {% else %}
+    <p>{{ rendered_value }}<img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    {% endif %} ;;
   }
 
 
