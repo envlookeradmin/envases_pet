@@ -15,6 +15,13 @@ view: rpt_mx_vtas {
     sql: ${TABLE}.ACTUALIZACION ;;
   }
 
+  dimension: fecha_ultimo {
+    type: date
+    sql: ${TABLE}.ACTUALIZACION ;;
+     html: {{ rendered_value | date: "%d %b, %y" }};;
+  }
+
+
   dimension: base_uom {
     type: string
     sql: ${TABLE}.BASE_UOM ;;
