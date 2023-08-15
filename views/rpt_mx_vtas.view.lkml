@@ -94,6 +94,21 @@ view: rpt_mx_vtas {
     type: number
     sql: ${TABLE}.ZNETVAL ;;
   }
+
+
+
+  measure: dash_nav {
+    hidden: no
+    label: "Navigation Bar"
+    type: string
+    sql: "Las cantidades del reporte están divididas entre mil";;
+
+  }
+
+
+
+
+
   measure: count {
     type: count
   }
@@ -113,7 +128,7 @@ view: rpt_mx_vtas {
       field: is_current_period_DAY
       value: "yes"
     }
-    value_format: "#,##0.0"
+    value_format: "#,##0"
     drill_fields: [ category,planta_desc,client,DIA]
   }
 
@@ -135,12 +150,11 @@ view: rpt_mx_vtas {
 
     html:
     {% if value > 0 %}
-    <p>{{ rendered_value }}<img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
     {% else %}
-    <p>{{ rendered_value }}<img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
     {% endif %} ;;
   }
-
 
 
   measure: MTD{
@@ -152,7 +166,7 @@ view: rpt_mx_vtas {
     }
 
    drill_fields: [ category,planta_desc,client,MTD]
-    value_format: "#,##0.0"
+    value_format: "#,##0"
   }
 
   measure: MTD_yl{
@@ -173,9 +187,9 @@ view: rpt_mx_vtas {
      drill_fields: [ category,planta_desc,client,VS_LY_1]
     html:
     {% if value > 0 %}
-    <p>{{ rendered_value }}<img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
     {% else %}
-    <p>{{ rendered_value }}<img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
     {% endif %} ;;
   }
 
@@ -188,7 +202,7 @@ view: rpt_mx_vtas {
       field:  is_current_period_DAY_YTD
       value: "yes"
     }
-    value_format: "#,##0.0"
+    value_format: "#,##0"
      drill_fields: [ category,planta_desc,client,YTD]
   }
 
@@ -209,9 +223,9 @@ view: rpt_mx_vtas {
      drill_fields: [ category,planta_desc,client,VS_LY_2]
     html:
     {% if value > 0 %}
-    <p>{{ rendered_value }}<img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
     {% else %}
-    <p>{{ rendered_value }}<img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
     {% endif %} ;;
   }
 
