@@ -49,16 +49,12 @@ view: rpt_mx_vtas {
     html:
 
       <div class="vis">
-          <div class="vis-single-value" style="  background-color: #888c8b; " >
+          <div class="vis-single-value" style="  background-color: #FFF; " >
 
           <p style="text-align: left;font-size:25px; color:#000000;">
                 Corte al  {{fecha_ultimo}}
 
          </p>
-
-
-
-
 
              </div>
 
@@ -92,7 +88,8 @@ view: rpt_mx_vtas {
   dimension: category {
     label: "Ventas por Sector"
     type: string
-    sql: ${TABLE}.CATEGORY ;;
+    sql: concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)))    ;;
+    #sql: UPPER(LEFT(${TABLE}.CATEGORY, 1)) + LOWER(SUBSTRING(${TABLE}.CATEGORY, 2, LEN(${TABLE}.CATEGORY)))   ;;
   }
 
 
@@ -194,6 +191,8 @@ view: rpt_mx_vtas {
     value_format: "#,##0"
     drill_fields: [ category,planta_desc,client,DIA]
   }
+
+
 
   measure: DIA_anterior{
     type: sum
