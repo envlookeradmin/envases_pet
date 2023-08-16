@@ -16,20 +16,44 @@ view: rpt_mx_vtas {
   }
 
   dimension: fecha_ultimo {
-    type: date
-    sql: ${TABLE}.ACTUALIZACION ;;
-     html: {{ rendered_value | date: "%d %b, %y" }};;
-  }
+    type: string
+    sql: CONCAT(CAST(EXTRACT(day FROM ${TABLE}.ACTUALIZACION) as STRING),
+            "-",
+             CASE
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION ) = 1 THEN  'Ene'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 2 THEN 'Feb'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 3 THEN 'Mar'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 4 THEN 'Abr'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 5 THEN 'May'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 6 THEN 'Jun'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 7 THEN 'Jul'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 8 THEN 'Ago'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 9 THEN 'Sep'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 10 THEN 'Oct'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 11 THEN 'Nov'
+              WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 12 THEN 'Dic'
+              ELSE 'Sin Clasificar'
+            END,
+            "-",
+            CAST(EXTRACT(year FROM ${TABLE}.ACTUALIZACION) as STRING)
+ )  ;;
+
+ }
+
+
 
 
   dimension: base_uom {
     type: string
     sql: ${TABLE}.BASE_UOM ;;
   }
+
   dimension: bill_qty {
     type: number
     sql: ${TABLE}.BILL_QTY ;;
   }
+
+
 
   #dimension: calday {
   #  type: string
@@ -46,6 +70,14 @@ view: rpt_mx_vtas {
     label: "planta_desc"
     type: string
     sql: ${TABLE}.name1 ;;
+  }
+
+
+  dimension: logo {
+    type: string
+    sql: "";;
+    html:<img src="https://www.envases.mx/media/10252/envases_rgb600x400px.png" height="170" width="255">;;
+
   }
 
 
@@ -157,9 +189,9 @@ view: rpt_mx_vtas {
 
     html:
     {% if value > 0 %}
-    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="  https://thumbs.dreamstime.com/z/icono-de-la-flecha-para-arriba-con-color-verde-que-aparece-el-s%C3%ADmbolo-direcci%C3%B3n-indicador-crecimiento-o-%C3%A9xito-143709247.jpg"    height=20 width=20></p>
     {% else %}
-    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://thumbs.dreamstime.com/z/icono-de-la-flecha-abajo-con-color-rojo-demostraci%C3%B3n-roja-del-s%C3%ADmbolo-para-direcci%C3%B3n-el-indicador-transferencia-directa-o-caer-143709041.jpg" height=20 width=20></p>
     {% endif %} ;;
   }
 
@@ -194,9 +226,9 @@ view: rpt_mx_vtas {
      drill_fields: [ category,planta_desc,client,VS_LY_1]
     html:
     {% if value > 0 %}
-    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="  https://thumbs.dreamstime.com/z/icono-de-la-flecha-para-arriba-con-color-verde-que-aparece-el-s%C3%ADmbolo-direcci%C3%B3n-indicador-crecimiento-o-%C3%A9xito-143709247.jpg"    height=20 width=20></p>
     {% else %}
-    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://thumbs.dreamstime.com/z/icono-de-la-flecha-abajo-con-color-rojo-demostraci%C3%B3n-roja-del-s%C3%ADmbolo-para-direcci%C3%B3n-el-indicador-transferencia-directa-o-caer-143709041.jpg" height=20 width=20></p>
     {% endif %} ;;
   }
 
@@ -230,12 +262,11 @@ view: rpt_mx_vtas {
      drill_fields: [ category,planta_desc,client,VS_LY_2]
     html:
     {% if value > 0 %}
-    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="https://findicons.com/files/icons/1036/function/48/circle_green.png"    height=10 width=10></p>
+    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="  https://thumbs.dreamstime.com/z/icono-de-la-flecha-para-arriba-con-color-verde-que-aparece-el-s%C3%ADmbolo-direcci%C3%B3n-indicador-crecimiento-o-%C3%A9xito-143709247.jpg"    height=20 width=20></p>
     {% else %}
-    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://findicons.com/files/icons/766/base_software/128/circle_red.png" height=10 width=10></p>
+    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://thumbs.dreamstime.com/z/icono-de-la-flecha-abajo-con-color-rojo-demostraci%C3%B3n-roja-del-s%C3%ADmbolo-para-direcci%C3%B3n-el-indicador-transferencia-directa-o-caer-143709041.jpg" height=20 width=20></p>
     {% endif %} ;;
   }
-
 
 
 
