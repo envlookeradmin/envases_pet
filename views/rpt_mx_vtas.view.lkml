@@ -41,6 +41,36 @@ view: rpt_mx_vtas {
  }
 
 
+  measure: dash_nav {
+    hidden: no
+    label: "Navigation Bar"
+    type: string
+    sql: "10";;
+    html:
+
+      <div class="vis">
+          <div class="vis-single-value" style="  background-color: #888c8b; " >
+
+          <p style="text-align: left;font-size:25px; color:#000000;">
+                Corte al  {{fecha_ultimo}}
+
+         </p>
+
+
+
+
+
+             </div>
+
+      </div>
+
+
+
+         ;;
+
+
+  }
+
 
 
   dimension: base_uom {
@@ -136,13 +166,7 @@ view: rpt_mx_vtas {
 
 
 
-  measure: dash_nav {
-    hidden: no
-    label: "Navigation Bar"
-    type: string
-    sql: "Las cantidades del reporte están divididas entre mil";;
 
-  }
 
 
 
@@ -187,12 +211,22 @@ view: rpt_mx_vtas {
     value_format: "0.0\%"
     drill_fields: [ category,planta_desc,client,VS_LY]
 
-    html:
+   html:
     {% if value > 0 %}
-    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="  https://thumbs.dreamstime.com/z/icono-de-la-flecha-para-arriba-con-color-verde-que-aparece-el-s%C3%ADmbolo-direcci%C3%B3n-indicador-crecimiento-o-%C3%A9xito-143709247.jpg"    height=20 width=20></p>
+    {% assign indicator = "green,▲" | split: ',' %}
     {% else %}
-    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://thumbs.dreamstime.com/z/icono-de-la-flecha-abajo-con-color-rojo-demostraci%C3%B3n-roja-del-s%C3%ADmbolo-para-direcci%C3%B3n-el-indicador-transferencia-directa-o-caer-143709041.jpg" height=20 width=20></p>
-    {% endif %} ;;
+    {% assign indicator = "red,▼" | split: ',' %}
+    {% endif %}
+
+    <font color="{{indicator[0]}}">
+
+    {% if value == 99999.12345 %} &infin
+
+    {% else %}{{rendered_value}}
+
+    {% endif %} {{indicator[1]}}
+
+    </font> ;;
   }
 
 
@@ -226,10 +260,20 @@ view: rpt_mx_vtas {
      drill_fields: [ category,planta_desc,client,VS_LY_1]
     html:
     {% if value > 0 %}
-    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="  https://thumbs.dreamstime.com/z/icono-de-la-flecha-para-arriba-con-color-verde-que-aparece-el-s%C3%ADmbolo-direcci%C3%B3n-indicador-crecimiento-o-%C3%A9xito-143709247.jpg"    height=20 width=20></p>
+    {% assign indicator = "green,▲" | split: ',' %}
     {% else %}
-    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://thumbs.dreamstime.com/z/icono-de-la-flecha-abajo-con-color-rojo-demostraci%C3%B3n-roja-del-s%C3%ADmbolo-para-direcci%C3%B3n-el-indicador-transferencia-directa-o-caer-143709041.jpg" height=20 width=20></p>
-    {% endif %} ;;
+    {% assign indicator = "red,▼" | split: ',' %}
+    {% endif %}
+
+    <font color="{{indicator[0]}}">
+
+    {% if value == 99999.12345 %} &infin
+
+    {% else %}{{rendered_value}}
+
+    {% endif %} {{indicator[1]}}
+
+    </font> ;;
   }
 
 
@@ -262,10 +306,23 @@ view: rpt_mx_vtas {
      drill_fields: [ category,planta_desc,client,VS_LY_2]
     html:
     {% if value > 0 %}
-    <p><span style="color:darkgreen;">{{ rendered_value }}</span><img src="  https://thumbs.dreamstime.com/z/icono-de-la-flecha-para-arriba-con-color-verde-que-aparece-el-s%C3%ADmbolo-direcci%C3%B3n-indicador-crecimiento-o-%C3%A9xito-143709247.jpg"    height=20 width=20></p>
+        {% assign indicator = "green,▲" | split: ',' %}
     {% else %}
-    <p><span style="color:red;">{{ rendered_value }}</span><img  src="https://thumbs.dreamstime.com/z/icono-de-la-flecha-abajo-con-color-rojo-demostraci%C3%B3n-roja-del-s%C3%ADmbolo-para-direcci%C3%B3n-el-indicador-transferencia-directa-o-caer-143709041.jpg" height=20 width=20></p>
-    {% endif %} ;;
+         {% assign indicator = "red,▼" | split: ',' %}
+    {% endif %}
+
+    <font color="{{indicator[0]}}">
+
+{% if value == 99999.12345 %} &infin
+
+{% else %}{{rendered_value}}
+
+{% endif %} {{indicator[1]}}
+
+</font> ;;
+
+
+
   }
 
 
