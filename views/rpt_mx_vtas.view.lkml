@@ -12,7 +12,7 @@ view: rpt_mx_vtas {
 
   dimension: actualizacion {
     type: date
-    sql: ${TABLE}.ACTUALIZACION ;;
+    sql:    ${TABLE}.ACTUALIZACION ;;
   }
 
   dimension: fecha_ultimo {
@@ -41,31 +41,6 @@ view: rpt_mx_vtas {
  }
 
 
-  measure: dash_nav {
-    hidden: no
-    label: "Navigation Bar"
-    type: string
-    sql: "10";;
-    html:
-
-      <div class="vis">
-          <div class="vis-single-value" style="  background-color: #FFF; " >
-
-          <p style="text-align: left;font-size:25px; color:#000000;">
-                Corte al  {{fecha_ultimo}}
-
-         </p>
-
-             </div>
-
-      </div>
-
-
-
-         ;;
-
-
-  }
 
 
 
@@ -194,6 +169,24 @@ view: rpt_mx_vtas {
 
 
 
+
+  measure: DIA_formato{
+    type: number
+    sql:   CAST(${DIA} AS STRING FORMAT '999,999')    ;;
+
+
+    value_format: "#,##0"
+    drill_fields: [ category,planta_desc,client,DIA]
+  }
+
+
+
+
+
+
+
+
+
   measure: DIA_anterior{
     type: sum
     sql: ${TABLE}.BILL_QTY/1000  ;;
@@ -226,6 +219,15 @@ view: rpt_mx_vtas {
     {% endif %} {{indicator[1]}}
 
     </font> ;;
+  }
+
+  measure: VS_LY_formato{
+    type: number
+    sql:  CAST(${VS_LY} AS STRING FORMAT '99.99')    ;;
+    value_format: "0.0\%"
+    drill_fields: [ category,planta_desc,client,VS_LY]
+
+
   }
 
 
@@ -561,6 +563,17 @@ view: rpt_mx_vtas {
     type: yesno
     sql:DATE_TRUNC(DATE_ADD(CAST(${created_date} AS DATE), INTERVAL -1 year), year) = DATE_TRUNC(CURRENT_DATE(), year);;
   }
+
+  measure: dash_nav {
+    hidden: no
+    label: "dia incremento"
+    type: number
+    sql: ${VS_LY_1} ;;
+
+
+
+  }
+
 
 
 
