@@ -24,8 +24,28 @@ view: rpt_mx_vtas {
 
 
   dimension: fecha_ultimo {
-    type: date
-    sql:   ${actualizacion};;
+    type: string
+    sql:  ${TABLE}.ACTUALIZACION;;
+   # CONCAT(CAST(EXTRACT(day FROM ${TABLE}.ACTUALIZACION) as STRING),
+
+   #  "-",
+   # #  CASE
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION ) = 1 THEN  'Ene'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 2 THEN 'Feb'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 3 THEN 'Mar'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 4 THEN 'Abr'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 5 THEN 'May'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 6 THEN 'Jun'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 7 THEN 'Jul'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 8 THEN 'Ago'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 9 THEN 'Sep'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 10 THEN 'Oct'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 11 THEN 'Nov'
+   #  WHEN  EXTRACT(Month FROM ${TABLE}.ACTUALIZACION)  = 12 THEN 'Dic'
+   #  ELSE 'Sin Clasificar'
+   #  END,
+   #  "-",
+  #   CAST(EXTRACT(year FROM ${TABLE}.ACTUALIZACION) as STRING));;
 
 
  }
