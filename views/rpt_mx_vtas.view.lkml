@@ -12,7 +12,7 @@ view: rpt_mx_vtas {
 
   dimension: actualizacion {
     type: date
-    sql:    ${TABLE}.ACTUALIZACION ;;
+    sql:  ${TABLE}.ACTUALIZACION   ;;
   }
 
   dimension: fecha_ultimo {
