@@ -1,6 +1,6 @@
 view: rpt_mx_vtas {
   derived_table: {
-    sql: SELECT *,DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION FROM `corp-pet-looker-reports.RPT_S4H_MX_DEV.RPT_MX_VTAS` where CATEGORY is not null ;;
+    sql: SELECT *,DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION FROM `corp-pet-looker-reports.RPT_S4H_MX_DEV.RPT_MX_VTAS` where CATEGORY is not in ('TOTAL MXN') ;;
   }
 
 
