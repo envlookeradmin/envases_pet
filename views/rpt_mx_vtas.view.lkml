@@ -236,7 +236,7 @@ view: rpt_mx_vtas {
   measure: VS_LY_formato{
     type: number
     sql:  CAST(${VS_LY} AS STRING FORMAT '99.99')    ;;
-    value_format: "0.0\%"
+    value_format: "0\%"
     drill_fields: [ category,planta_desc,client,VS_LY]
 
 
@@ -270,7 +270,7 @@ view: rpt_mx_vtas {
   measure: VS_LY_1{
     type: number
     sql:    (${MTD}-${MTD_yl})/NULLIF(${MTD_yl},0) *100  ;;
-    value_format: "0.0\%"
+    value_format: "0\%"
      drill_fields: [ category,planta_desc,client,VS_LY_1]
     html:
     {% if value > 0 %}
@@ -318,7 +318,7 @@ view: rpt_mx_vtas {
   measure: VS_LY_2{
     type: number
     sql:    (${YTD}-${YTD_anterior})/NULLIF(${YTD_anterior},0) * 100 ;;
-    value_format: "0.0\%"
+    value_format: "0\%"
      drill_fields: [ category,planta_desc,client,VS_LY_2]
     html:
     {% if value > 0 %}
