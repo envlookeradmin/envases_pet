@@ -198,12 +198,14 @@ view: rpt_mx_vtas {
 
 
   measure: DIA_anterior{
+    label: "DIA LY"
     type: sum
     sql: ${TABLE}.BILL_QTY/1000  ;;
     filters: {
       field: is_current_period_DAY_anterior
       value: "yes"
     }
+    value_format: "#,##0"
   }
 
 
@@ -254,13 +256,14 @@ view: rpt_mx_vtas {
   }
 
   measure: MTD_yl{
+    label: "MTD LY"
     type: sum
     sql: ${TABLE}.BILL_QTY/1000 ;;
     filters: {
       field: is_current_period_MONTH_anterior
       value: "yes"
     }
-
+    value_format: "#,##0"
   }
 
 
@@ -301,12 +304,14 @@ view: rpt_mx_vtas {
   }
 
   measure: YTD_anterior{
+    label: "YTD LY"
     type: sum
     sql: ${TABLE}.BILL_QTY /1000;;
     filters: {
       field:  is_current_period_DAY_YTD_anterior
       value: "yes"
     }
+    value_format: "#,##0"
   }
 
 
