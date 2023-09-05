@@ -198,7 +198,7 @@ view: rpt_mx_vtas {
 
 
   measure: DIA_anterior{
-    label: "DIA LY"
+    label: "LY DIA"
     type: sum
     sql: ${TABLE}.BILL_QTY/1000  ;;
     filters: {
@@ -256,7 +256,7 @@ view: rpt_mx_vtas {
   }
 
   measure: MTD_yl{
-    label: "MTD LY"
+    label: "LY MTD"
     type: sum
     sql: ${TABLE}.BILL_QTY/1000 ;;
     filters: {
@@ -304,7 +304,7 @@ view: rpt_mx_vtas {
   }
 
   measure: YTD_anterior{
-    label: "YTD LY"
+    label: "LY YTD"
     type: sum
     sql: ${TABLE}.BILL_QTY /1000;;
     filters: {
