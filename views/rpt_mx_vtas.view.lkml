@@ -8,6 +8,7 @@ view: rpt_mx_vtas {
     label: "Período"
     description: "Use this date filter in combination with the timeframes dimension for dynamic date filtering"
     type: date
+
   }
 
   dimension: actualizacion {
