@@ -10,6 +10,6 @@ datagroup: envases_pet_default_datagroup {
 
 persist_with: envases_pet_default_datagroup
 
-explore: rpt_mx_vtas {
+explore: rpt_mx_vtas {}
 
-}
+explore: rpt_mx_vtas_periodo {}

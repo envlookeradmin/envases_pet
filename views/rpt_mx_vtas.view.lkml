@@ -76,6 +76,19 @@ view: rpt_mx_vtas {
     type: string
     sql: concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)))    ;;
     #sql: UPPER(LEFT(${TABLE}.CATEGORY, 1)) + LOWER(SUBSTRING(${TABLE}.CATEGORY, 2, LEN(${TABLE}.CATEGORY)))   ;;
+
+
+   # link: {
+    #  label: "Solicitante"
+    #  url:"https://envases.cloud.looker.com/dashboards/54?Período={{ _filters['date_filter'] | url_encode }}&Ventas+por+Sector={{ value }}"
+
+      #   url: "https://grupoeon.cloud.looker.com/dashboards-next/35?&f[Sociedad]={{ _filters['Sociedad'] | url_encode }}"
+    #  #https://corpcab.cloud.looker.com/dashboards/50?Material={{ value }}"
+    #  icon_url: "https://cdn0.iconfinder.com/data/icons/real-estate-111/512/Real_Estate_expanded-14-512.png"
+    #}
+
+
+   # https://envases.cloud.looker.com/dashboards/54?Per%C3%ADodo=2023%2F09%2F05&Ventas%20por%20Sector=
   }
 
 
@@ -151,7 +164,14 @@ view: rpt_mx_vtas {
 
 
 
+  dimension: Fecha_venta {
+    type: date
+    sql:  CAST(${TABLE}.Fecha AS TIMESTAMP) ;;
 
+
+
+    drill_fields:[category,Fecha_venta,MTD,YTD]
+  }
 
 
 
@@ -186,7 +206,7 @@ view: rpt_mx_vtas {
     sql:   CAST(${DIA} AS STRING FORMAT '999,999')    ;;
 
 
-    value_format: "#,##0"
+    value_format: "##,##0"
     drill_fields: [ category,planta_desc,client,DIA]
   }
 
@@ -236,10 +256,9 @@ view: rpt_mx_vtas {
 
   measure: VS_LY_formato{
     type: number
-    sql:  CAST(${VS_LY} AS STRING FORMAT '99.99')    ;;
-    value_format: "0.0\%"
+    sql:  CAST(${VS_LY} AS STRING FORMAT '999.9')    ;;
+    value_format: "000.0\%"
     drill_fields: [ category,planta_desc,client,VS_LY]
-
 
   }
 
@@ -434,6 +453,14 @@ view: rpt_mx_vtas {
   }
 
 
+
+
+
+
+
+
+
+
   dimension_group: created {
     label: "Fecha"
     type: time
@@ -448,6 +475,8 @@ view: rpt_mx_vtas {
       year
     ]
     sql: CAST(${TABLE}.Fecha AS TIMESTAMP) ;;
+
+
 
   }
 
@@ -595,7 +624,8 @@ view: rpt_mx_vtas {
 
   set: detail {
     fields: [
-      category,detail*
+      category,Fecha_venta,MTD,YTD
+
     ]
     }
 
