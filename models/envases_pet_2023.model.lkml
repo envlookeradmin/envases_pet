@@ -1,4 +1,4 @@
-connection: "pet_envases"
+connection: "envases_analytics_qa"
 
 # include all the views
 include: "/views/**/*.view.lkml"
