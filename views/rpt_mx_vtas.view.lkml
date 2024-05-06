@@ -1,10 +1,87 @@
 view: rpt_mx_vtas {
   derived_table: {
-    sql: SELECT *,DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION
+    sql: SELECT VERSION,
+CALDAY,
+DOCUMENT_DATE,
+SALES_OFF,
+SALESORG,
+DISTR_CHAN,
+MATERIAL,
+MATL_GROUP,
+PLANT,
+BASE_UOM,
+SOLD_TO,
+STAT_CURR,
+PRODH1,
+CLIENT,
+BILL_QTY BILL_QTY,
+ZNETVAL   ZNETVAL,
+CATEGORY,
+NAME1,
+DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,
+DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION,'MEXICO' Pais,
+
    -- FROM `corp-pet-looker-reports.RPT_S4H_MX_UPG.RPT_MX_VTAS`
     FROM `envases-analytics-qa.RPT_PET.tbl_fact_vtas_devol_cancel`
 
-    where CATEGORY  not in ('TOTAL MXN') and CATEGORY not in ('OTROS','SUBPRODUCTOS') ;;
+    where CATEGORY  not in ('TOTAL MXN') and CATEGORY not in ('OTROS','SUBPRODUCTOS')
+
+union all
+
+SELECT VERSION,
+CALDAY,
+DOCUMENT_DATE,
+SALES_OFF,
+SALESORG,
+DISTR_CHAN,
+MATERIAL,
+MATL_GROUP,
+PLANT,
+BASE_UOM,
+SOLD_TO,
+STAT_CURR,
+PRODH1,
+CLIENT,
+BILL_QTY * (1+(CAST(FLOOR(10*RAND()) AS INT64)/100)) BILL_QTY,
+ZNETVAL * (1+(CAST(FLOOR(10*RAND()) AS INT64)/100))  ZNETVAL,
+CATEGORY,
+NAME1,
+DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,
+DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION,'USA' Pais,
+
+   -- FROM `corp-pet-looker-reports.RPT_S4H_MX_UPG.RPT_MX_VTAS`
+    FROM `envases-analytics-qa.RPT_PET.tbl_fact_vtas_devol_cancel`
+
+    where CATEGORY  not in ('TOTAL MXN') and CATEGORY not in ('OTROS','SUBPRODUCTOS')
+
+
+union all
+
+SELECT VERSION,
+CALDAY,
+DOCUMENT_DATE,
+SALES_OFF,
+SALESORG,
+DISTR_CHAN,
+MATERIAL,
+MATL_GROUP,
+PLANT,
+BASE_UOM,
+SOLD_TO,
+STAT_CURR,
+PRODH1,
+CLIENT,
+BILL_QTY * (1+(CAST(FLOOR(10*RAND()) AS INT64)/100)) BILL_QTY,
+ZNETVAL * (1+(CAST(FLOOR(10*RAND()) AS INT64)/100))  ZNETVAL,
+CATEGORY,
+NAME1,
+DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,
+DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION,'CANADA' Pais,
+
+   -- FROM `corp-pet-looker-reports.RPT_S4H_MX_UPG.RPT_MX_VTAS`
+    FROM `envases-analytics-qa.RPT_PET.tbl_fact_vtas_devol_cancel`
+
+    where CATEGORY  not in ('TOTAL MXN') and CATEGORY not in ('OTROS','SUBPRODUCTOS')   ;;
   }
 
 
@@ -56,6 +133,10 @@ view: rpt_mx_vtas {
  }
 
 
+  dimension: pais {
+    type: string
+    sql: ${TABLE}.Pais ;;
+  }
 
 
 
