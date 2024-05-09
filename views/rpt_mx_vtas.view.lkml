@@ -157,23 +157,18 @@ DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION,'CANADA' Pais,
   #  sql: ${TABLE}.CALDAY ;;
   #}
   dimension: category {
+    label: "Ventas por Agrupador"
+    type: string
+    sql:case when pais='CANADA' then  concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , REPLACE(LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)),'mx',''),' ','CA')
+             when pais='USA' then  concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , REPLACE(LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)),'mx',''),' ','USA')else concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20))) end    ;;
+
+  }
+
+  dimension: category_sector {
     label: "Ventas por Sector"
     type: string
-    sql: concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)))    ;;
-    #sql: UPPER(LEFT(${TABLE}.CATEGORY, 1)) + LOWER(SUBSTRING(${TABLE}.CATEGORY, 2, LEN(${TABLE}.CATEGORY)))   ;;
+    sql:concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)));;
 
-
-   # link: {
-    #  label: "Solicitante"
-    #  url:"https://envases.cloud.looker.com/dashboards/54?Período={{ _filters['date_filter'] | url_encode }}&Ventas+por+Sector={{ value }}"
-
-      #   url: "https://grupoeon.cloud.looker.com/dashboards-next/35?&f[Sociedad]={{ _filters['Sociedad'] | url_encode }}"
-    #  #https://corpcab.cloud.looker.com/dashboards/50?Material={{ value }}"
-    #  icon_url: "https://cdn0.iconfinder.com/data/icons/real-estate-111/512/Real_Estate_expanded-14-512.png"
-    #}
-
-
-   # https://envases.cloud.looker.com/dashboards/54?Per%C3%ADodo=2023%2F09%2F05&Ventas%20por%20Sector=
   }
 
 
