@@ -1,4 +1,5 @@
-connection: "pet_envases"
+#connection: "pet_envases"
+connection: "@{CONNECTION_NAME}"
 
 # include all the views
 include: "/views/**/*.view.lkml"
