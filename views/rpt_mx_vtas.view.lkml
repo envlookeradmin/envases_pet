@@ -1,6 +1,87 @@
 view: rpt_mx_vtas {
   derived_table: {
-    sql: SELECT *,DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION FROM `corp-pet-looker-reports.RPT_S4H_MX_DEV.RPT_MX_VTAS` where CATEGORY  not in ('TOTAL MXN') and CATEGORY not in ('OTROS','SUBPRODUCTOS') ;;
+    sql: SELECT VERSION,
+CALDAY,
+DOCUMENT_DATE,
+SALES_OFF,
+SALESORG,
+DISTR_CHAN,
+MATERIAL,
+MATL_GROUP,
+PLANT,
+BASE_UOM,
+SOLD_TO,
+STAT_CURR,
+PRODH1,
+CLIENT,
+BILL_QTY BILL_QTY,
+ZNETVAL   ZNETVAL,
+REPLACE(REPLACE(CATEGORY,'mx',''),'MX','') CATEGORY,
+NAME1,
+DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,
+DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION,'MEXICO' Pais,
+
+   -- FROM `corp-pet-looker-reports.RPT_S4H_MX_UPG.RPT_MX_VTAS`
+    FROM `envases-analytics-qa.RPT_PET.tbl_fact_vtas_devol_cancel`
+
+    where CATEGORY  not in ('TOTAL MXN') and CATEGORY not in ('OTROS','SUBPRODUCTOS')
+
+union all
+
+SELECT VERSION,
+CALDAY,
+DOCUMENT_DATE,
+SALES_OFF,
+SALESORG,
+DISTR_CHAN,
+MATERIAL,
+MATL_GROUP,
+PLANT,
+BASE_UOM,
+SOLD_TO,
+STAT_CURR,
+PRODH1,
+CLIENT,
+BILL_QTY * (1+(CAST(FLOOR(10*RAND()) AS INT64)/100)) BILL_QTY,
+ZNETVAL * (1+(CAST(FLOOR(10*RAND()) AS INT64)/100))  ZNETVAL,
+REPLACE(REPLACE(CATEGORY,'mx',''),'MX','') CATEGORY,
+NAME1,
+DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,
+DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION,'USA' Pais,
+
+   -- FROM `corp-pet-looker-reports.RPT_S4H_MX_UPG.RPT_MX_VTAS`
+    FROM `envases-analytics-qa.RPT_PET.tbl_fact_vtas_devol_cancel`
+
+    where CATEGORY  not in ('TOTAL MXN') and CATEGORY not in ('OTROS','SUBPRODUCTOS')
+
+
+union all
+
+SELECT VERSION,
+CALDAY,
+DOCUMENT_DATE,
+SALES_OFF,
+SALESORG,
+DISTR_CHAN,
+MATERIAL,
+MATL_GROUP,
+PLANT,
+BASE_UOM,
+SOLD_TO,
+STAT_CURR,
+PRODH1,
+CLIENT,
+BILL_QTY * (1+(CAST(FLOOR(10*RAND()) AS INT64)/100)) BILL_QTY,
+ZNETVAL * (1+(CAST(FLOOR(10*RAND()) AS INT64)/100))  ZNETVAL,
+REPLACE(REPLACE(CATEGORY,'mx',''),'MX','') CATEGORY,
+NAME1,
+DATE(PARSE_TIMESTAMP('%Y%m%d',CALDAY)) fecha,
+DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY) ACTUALIZACION,'CANADA' Pais,
+
+   -- FROM `corp-pet-looker-reports.RPT_S4H_MX_UPG.RPT_MX_VTAS`
+    FROM `envases-analytics-qa.RPT_PET.tbl_fact_vtas_devol_cancel`
+
+    where CATEGORY  not in ('TOTAL MXN') and CATEGORY not in ('OTROS','SUBPRODUCTOS')   ;;
   }
 
 
@@ -52,6 +133,10 @@ view: rpt_mx_vtas {
  }
 
 
+  dimension: pais {
+    type: string
+    sql: ${TABLE}.Pais ;;
+  }
 
 
 
@@ -72,23 +157,19 @@ view: rpt_mx_vtas {
   #  sql: ${TABLE}.CALDAY ;;
   #}
   dimension: category {
+    label: "Ventas por Agrupador"
+    type: string
+    sql:case when pais='CANADA' then  concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)),' ','CA')
+             when pais='USA' then  concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) ,    LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)),' ','USA')
+             when pais='MEXICO' then  concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) ,    LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)),' ','MX') else concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20))) end    ;;
+
+  }
+
+  dimension: category_sector {
     label: "Ventas por Sector"
     type: string
-    sql: concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)))    ;;
-    #sql: UPPER(LEFT(${TABLE}.CATEGORY, 1)) + LOWER(SUBSTRING(${TABLE}.CATEGORY, 2, LEN(${TABLE}.CATEGORY)))   ;;
+    sql:concat(UPPER(LEFT(${TABLE}.CATEGORY, 1)) , LOWER(SUBSTR(${TABLE}.CATEGORY, 2, 20)));;
 
-
-   # link: {
-    #  label: "Solicitante"
-    #  url:"https://envases.cloud.looker.com/dashboards/54?Período={{ _filters['date_filter'] | url_encode }}&Ventas+por+Sector={{ value }}"
-
-      #   url: "https://grupoeon.cloud.looker.com/dashboards-next/35?&f[Sociedad]={{ _filters['Sociedad'] | url_encode }}"
-    #  #https://corpcab.cloud.looker.com/dashboards/50?Material={{ value }}"
-    #  icon_url: "https://cdn0.iconfinder.com/data/icons/real-estate-111/512/Real_Estate_expanded-14-512.png"
-    #}
-
-
-   # https://envases.cloud.looker.com/dashboards/54?Per%C3%ADodo=2023%2F09%2F05&Ventas%20por%20Sector=
   }
 
 

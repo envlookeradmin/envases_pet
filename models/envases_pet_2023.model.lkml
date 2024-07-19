@@ -1,6 +1,11 @@
 #connection: "pet_envases"
 connection: "@{CONNECTION_NAME}"
 
+#connection: "envases_analytics_qa"
+
+#connection: "pet_envases"
+#>>>>>>> branch 'master' of https://github.com/envlookeradmin/envases_pet.git
+
 # include all the views
 include: "/views/**/*.view.lkml"
 include: "/LookML_Dashboard/*.dashboard.lookml"
